@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head><title>WebSocket Chat Test</title></head>
+<body>
+  <h2>Test WebSocket Chat</h2>
+  <input id="message" type="text" placeholder="Type your message..." />
+  <button onclick="sendMessage()">Send</button>
+  <ul id="chat"></ul>
+
+  <script>
+    const userId = "user123";  // Simulate a user ID
+    const socket = new WebSocket(`ws://localhost:8000/ws/chat/${userId}`);
+
+    socket.onmessage = function(event) {
+      const messages = JSON.parse(event.data);
+    //   console.log(messages);
+      const chatBox = document.getElementById("chat");
+      chatBox.innerHTML = "";  // Clear old messages
+      messages.forEach(msg => {
+        const item = document.createElement("li");
+        item.textContent = `${msg.role}: ${msg.message}`;
+        chatBox.appendChild(item);
+      });
+    };
+
+    function sendMessage() {
+      const input = document.getElementById("message");
+      const message = input.value.trim();
+      if (message) {
+        socket.send(message);
+        input.value = "";
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from lstm_redis import set_long_term, get_long_term, set_short_term, get_short_term
 from typing import List, Dict
+import uvicorn
 
 app = FastAPI()
 
@@ -32,3 +33,6 @@ async def chat_endpoint(websocket: WebSocket, user_id: str):
         print(f"WebSocket connection closed for user {user_id}")
         # Optionally, you can clear the short-term memory when the connection is closed
         # r.delete(f"stm:{user_id}")
+
+if __name__ == "__main__":
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True) 

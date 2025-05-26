@@ -1,7 +1,15 @@
 import redis
 import json
+from dotenv import load_dotenv
+import os
+# Load environment variables from .env file
 
-r = redis.Redis(host="localhost", port=6379, decode_responses=True)
+load_dotenv()
+
+r = redis.Redis(host=os.getenv("REDIS_HOST"),
+                port=int(os.getenv("REDIS_PORT")),
+                password=os.getenv("REDIS_PASSWORD"),
+                decode_responses=True)
 
 def set_short_term(user_id, message):
     key = f"stm:{user_id}"
